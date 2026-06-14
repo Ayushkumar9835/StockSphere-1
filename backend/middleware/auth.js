@@ -4,7 +4,7 @@
 
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
-const { ApiError } = require("../utils/ApiError");
+const { ApiError } = require("../utils/Apierror");
 const { User } = require("../Model/UserModel");
 
 module.exports.verifyJWT = asyncHandler(async (req, res, next) => {

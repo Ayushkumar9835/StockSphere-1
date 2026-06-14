@@ -7,10 +7,10 @@ const bodyParser = require('body-parser');
 
 const HoldingsModel = require("./Model/HoldingModel");
 const PositionModel = require("./Model/PositionModel");
-const OrdersModel = require("./Model/OrderModel");
+const Order = require("./Model/OrderModel");
 const  {asyncHandler} = require( "./utils/asyncHandler.js");
-const {ApiError} =require( "./utils/ApiError.js");
-const {ApiResponse} =require( "./utils/apiResponse.js");
+const {ApiError} = require("./utils/Apierror.js");
+const {ApiResponse} = require("./utils/ApiResponse.js");
 const {User} =require( "./Model/UserModel");
 const bcrypt =require( "bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -82,7 +82,7 @@ app.get("/allPositions", async (req, res) => {
 });
 
 // app.post("/newOrder", async (req, res) => {
-//   let newOrder = new OrdersModel({
+//   let newOrder = new Order({
 //     name: req.body.name,
 //     qty: req.body.qty,
 //     price: req.body.price,
@@ -257,7 +257,7 @@ app.post("/payment-verification", verifyJWT, async (req, res) => {
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_APT_SECRET)
+    .createHmac("sha256", process.env.RAZORPAY_SECRET)
     .update(body)
     .digest("hex");
 
@@ -281,6 +281,10 @@ app.post("/payment-verification", verifyJWT, async (req, res) => {
     order.status = "completed";
 
     await order.save();
+    res.status(200).json({
+      success: true,
+      message: "Payment verified successfully",
+    });
   } else {
     res.status(400).json({
       success: false,
@@ -289,7 +293,7 @@ app.post("/payment-verification", verifyJWT, async (req, res) => {
 });
 
 app.get("/api/getkey", (req, res) =>
-  res.status(200).json({ key: process.env.RAZORPAY_API_KEY })
+  res.status(200).json({ key: process.env.RAZORPAY_KEY_ID })
 );
 
 mongoose.connect(MONGO_URL)
