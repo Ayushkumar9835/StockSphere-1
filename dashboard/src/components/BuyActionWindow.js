@@ -22,7 +22,7 @@ const BuyActionWindow = ({ uid }) => {
         qty: Number(stockQuantity),
         price: Number(stockPrice),
         model: "BUY",
-    
+        navigate,
       });
 
       GeneralContext.closeBuyWindow();

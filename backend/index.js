@@ -225,7 +225,6 @@ app.post("/checkout", verifyJWT, async (req, res) => {
   const options = {
     amount: Number(price * 100),
     currency: "INR",
-    name:name,
   };
 
   const razorpayOrder = await instance.orders.create(options);
@@ -292,7 +291,7 @@ app.post("/payment-verification", verifyJWT, async (req, res) => {
   }
 });
 
-app.get("/api/getkey", (req, res) =>
+app.get("/get-razorpay-key", (req, res) =>
   res.status(200).json({ key: process.env.RAZORPAY_KEY_ID })
 );
 
